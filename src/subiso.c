@@ -17,6 +17,7 @@
 #include "stdlib.h"
 #include "string.h"
 #include "stdio.h"
+#include <pthread.h>
 
 /* Map comparison defines */
 #define MAP_EQUAL    0
@@ -673,8 +674,11 @@ static RESBUF * subiso_dp (NICE_TREE_DEC_NODE * x)
       }
     case JOIN_NODE:
       {
-        r_old_1 = subiso_dp(x->child_1);
-        r_old_2 = subiso_dp(x->child_2);
+        pthread_t th1, th2;
+        pthread_create(&th1,NULL,subiso_dp_parallel,(void *)x->child_1);
+        pthread_create(&th2,NULL,subiso_dp_parallel,(void *)x->child_2);
+        pthread_join(th1,(void **)&r_old_1);
+        pthread_join(th2,(void **)&r_old_2);
         subiso_join(x, r_old_1, r_old_2, x->rbuf);
         break;
       }
@@ -683,6 +687,15 @@ static RESBUF * subiso_dp (NICE_TREE_DEC_NODE * x)
   }
   resbuf_chng_state(x->rbuf, RES_READ);
   return x->rbuf;
+}
+
+/* -------------------------
+ * Function: subiso_dp_parallel
+ * -------------------------
+ */
+void * subiso_dp_parallel (void * arg)
+{
+  return subiso_dp(arg);
 }
 
 /* -------------------------

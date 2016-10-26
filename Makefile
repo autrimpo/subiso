@@ -2,7 +2,7 @@ CC          := gcc
 UCW_CFLAGS  := $(shell pkg-config --cflags libucw)
 UCW_LFLAGS  := $(shell pkg-config --libs libucw)
 CFLAGS      := -std=gnu99 -c -MMD -MP $(UCW_CFLAGS) -Wno-implicit-function-declaration -O3
-LFLAGS      := -std=gnu99 $(UCW_LFLAGS)
+LFLAGS      := -std=gnu99 $(UCW_LFLAGS) -lpthread
 SOURCEDIR   := src
 BUILDDIR    := build
 C_FILES     := $(wildcard $(SOURCEDIR)/*.c)
