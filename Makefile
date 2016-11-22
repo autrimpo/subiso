@@ -2,7 +2,7 @@ CC                 := gcc
 UCW_CFLAGS         := $(shell pkg-config --cflags libucw)
 UCW_LFLAGS         := $(shell pkg-config --libs libucw)
 CFLAGS             := -std=gnu99 -c -MMD -MP $(UCW_CFLAGS) -Wno-implicit-function-declaration -O3
-LFLAGS             := -std=gnu99 $(UCW_LFLAGS) -lpthread
+LFLAGS             := -std=gnu99 $(UCW_LFLAGS) -pthread
 SOURCEDIR          := src
 BUILDDIR           := build
 C_FILES            := $(wildcard $(SOURCEDIR)/*.c)
@@ -30,7 +30,7 @@ endif
 endif
 
 $(BIN_NAME) : UCW_LIBPATH = $(shell find . -name '$(UCW_VER).a' | grep lib/)
-$(BIN_NAME) : LFLAGS_STATIC = -std=gnu99 -lpthread
+$(BIN_NAME) : LFLAGS_STATIC = -std=gnu99 -pthread
 $(BIN_NAME) : $(OBJ_FILES)
 ifneq ($(shell pkg-config --libs libucw), -lucw-6.5)
 	$(CC) $(LFLAGS_STATIC) $(OBJ_FILES) $(UCW_LIBPATH) -o $(BIN_NAME)
