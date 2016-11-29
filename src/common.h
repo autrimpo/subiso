@@ -11,6 +11,7 @@
 #define __COMMON_H__
 
 #include <ucw/lib.h>
+#include <semaphore.h>
 
 /* Graph constants */
 #define MAX_G_VERTICES   1000000000 
@@ -61,5 +62,7 @@ extern int           * F_ECC;
 
 /* Time and memory measurement */
 extern double          A_TIME;
+
+extern sem_t           THREADS;
 
 #endif /*__COMMON_H__*/

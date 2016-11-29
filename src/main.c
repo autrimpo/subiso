@@ -26,6 +26,7 @@
 #include <ucw/varint.h>
 
 int      SEED;
+sem_t    THREADS;
 double A_TIME;
 
 int main (int argc, char * argv [])
@@ -35,13 +36,17 @@ int main (int argc, char * argv [])
   
   if (argc < 3)
   {
-    fprintf(stderr, "Usage: ./grs <graph_big> <graph_pattern> [seed] [iteration count]\n");
+    fprintf(stderr, "Usage: ./grs <graph_big> <graph_pattern> [threads count] [seed] [iteration count]\n");
     force_exit();
   }
+	if (argc == 3) sem_init(&THREADS,0,2);
   if (argc >= 4)
   {
-    SEED = atoi(argv[3]);
-    if (argc >= 5) rep_cnt = atoi(argv[4]);
+		sem_init(&THREADS,0,atoi(argv[3]));
+    if (argc >= 5) {
+			SEED = atoi(argv[4]);
+			if (argc >= 6) rep_cnt = atoi(argv[5]);
+		}
   }
   
   G_GRAPH = graph_load(argv[1], MAX_G_VERTICES);
