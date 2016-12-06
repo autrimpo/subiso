@@ -674,17 +674,12 @@ static RESBUF * subiso_dp (NICE_TREE_DEC_NODE * x)
       }
     case JOIN_NODE:
       {
-				int thread_cnt;
-				sem_getvalue(&THREADS,&thread_cnt);
-				if ((thread_cnt >= 2) && (thread_cnt % 2 == 0)) {
-					sem_wait(&THREADS);
-					sem_wait(&THREADS);
+				if (! sem_trywait(&THREADS)) {
 					pthread_t th1, th2;
 					pthread_create(&th1,NULL,subiso_dp_parallel,(void *)x->child_1);
 					pthread_create(&th2,NULL,subiso_dp_parallel,(void *)x->child_2);
 					pthread_join(th1,(void **)&r_old_1);
 					pthread_join(th2,(void **)&r_old_2);
-					sem_post(&THREADS);
 					sem_post(&THREADS);
 				} else {
 					r_old_1 = subiso_dp(x->child_1);

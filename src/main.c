@@ -39,10 +39,10 @@ int main (int argc, char * argv [])
     fprintf(stderr, "Usage: ./grs <graph_big> <graph_pattern> [threads count] [seed] [iteration count]\n");
     force_exit();
   }
-	if (argc == 3) sem_init(&THREADS,0,2);
+	if (argc == 3) sem_init(&THREADS,0,1);
   if (argc >= 4)
   {
-		sem_init(&THREADS,0,atoi(argv[3]));
+		sem_init(&THREADS,0,atoi(argv[3])/2);
     if (argc >= 5) {
 			SEED = atoi(argv[4]);
 			if (argc >= 6) rep_cnt = atoi(argv[5]);
